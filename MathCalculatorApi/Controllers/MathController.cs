@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MathCalculatorApi.Extensions;
+using MathCalculatorApi.Responses;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MathCalculatorApi.Controllers;
 
@@ -9,50 +11,37 @@ public class MathController : ControllerBase
     [HttpPost("add")]
     public ActionResult Add(ICollection<int> nums)
     {
-        return new JsonResult(new
-        {
-            nums,
-            sum = nums.Sum()
-        });
+        var s = nums.Sum();
+        return new BasicArithmeticResponse(s, nums)
+            .ToJsonResult();
     }
 
     [HttpGet("add")]
     public ActionResult Add(int x, int y)
     {
-        return new JsonResult(new
-        {
-            nums = new[] { x, y },
-            sum = x + y
-        });
+        return new BasicArithmeticResponse(x + y, x, y)
+            .ToJsonResult();
     }
 
     [HttpGet("subtract")]
     public ActionResult Subtract(int x, int y)
     {
-        return new JsonResult(new
-        {
-            nums = new[] { x, y },
-            diff = x - y
-        });
+        return new BasicArithmeticResponse(x - y, x, y)
+            .ToJsonResult();
     }
 
     [HttpGet("multiply")]
     public ActionResult Multiply(int x, int y)
     {
-        return new JsonResult(new
-        {
-            nums = new[] { x, y },
-            prod = x * y
-        });
+        return new BasicArithmeticResponse(x * y, x, y)
+            .ToJsonResult();
     }
     
     [HttpPost("multiply")]
     public ActionResult Multiply(ICollection<int> nums)
     {
-        return new JsonResult(new
-        {
-            nums,
-            prod = nums.Aggregate(1, (state, next) => state * next)
-        });
+        var p = nums.Aggregate(1, (state, next) => state * next);
+        return new BasicArithmeticResponse(p, nums)
+            .ToJsonResult();
     }
 }
